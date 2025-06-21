@@ -1,1 +1,3 @@
 quando ti installi la cartella, andare su source/isaaclab_assets/isaaclab_assets/robots/omniquad.py --> cambiare il path a riga 15, togli enea e metti il tuo path
+
+ciao ciao
