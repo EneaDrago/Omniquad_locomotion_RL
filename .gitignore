@@ -71,4 +71,4 @@ tests/
 .isaac-lab-docker-history
 
 # Ignore my path  
-*/source/isaaclab_assets/isaaclab_assets/robots/omniquad.py
+**/source/isaaclab_assets/isaaclab_assets/robots/omniquad.py
