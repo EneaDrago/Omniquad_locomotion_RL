@@ -70,5 +70,3 @@ tests/
 # Docker history
 .isaac-lab-docker-history
 
-# Ignore my path  
-**/robots/omniquad/*
