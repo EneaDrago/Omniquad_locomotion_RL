@@ -6,13 +6,15 @@ from isaaclab.assets.articulation import ArticulationCfg
 from isaaclab.sensors import RayCasterCfg
 from isaaclab.utils.assets import ISAACLAB_NUCLEUS_DIR
 
+from pathlib import Path
+
 ##
 # Configuration - Actuators.
 ##
 
 OMNIQUAD_CFG = ArticulationCfg(
     spawn=sim_utils.UsdFileCfg(
-        usd_path=f"{ISAACLAB_NUCLEUS_DIR}/omniquad/omniquad.usd",
+        usd_path=str(Path.home() / "IsaacLab/isaac_model/omniquad/omniquad.usd"),
         activate_contact_sensors=True,
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
             disable_gravity=False,
