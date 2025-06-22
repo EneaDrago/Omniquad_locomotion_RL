@@ -256,7 +256,7 @@ class RewardsCfg:
             "sensor_cfg": SceneEntityCfg("height_scanner"),
         },
     )
-    # joint_deviation_l1 = RewTerm(func=mdp.joint_deviation_l1, weight=-0.01)
+
     feet_air_time = RewTerm(
         func=mdp.feet_air_time,
         weight=-5.0,
