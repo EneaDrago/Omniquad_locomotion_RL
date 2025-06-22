@@ -257,15 +257,17 @@ class RewardsCfg:
         },
     )
     # joint_deviation_l1 = RewTerm(func=mdp.joint_deviation_l1, weight=-0.01)
-    # feet_air_time = RewTerm(
-    #     func=mdp.feet_air_time,
-    #     weight=0.125,
-    #     params={
-    #         "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*LOWER_LEG"),
-    #         "command_name": "base_velocity",
-    #         "threshold": 0.5,
-    #     },
-    # )
+
+    feet_air_time = RewTerm(
+        func=mdp.feet_air_time,
+        weight=-5.0,
+        params={
+            "sensor_cfg": SceneEntityCfg("contact_forces", body_names="(LF|RF|LH|RH)_WHEEL"),
+            "command_name": "base_velocity",
+            "threshold": 0.001,
+        },
+    )
+
     undesired_contacts = RewTerm(
         func=mdp.undesired_contacts,
         weight=-1.0,

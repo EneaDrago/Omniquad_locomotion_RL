@@ -1,3 +1,7 @@
-quando ti installi la cartella, andare su source/isaaclab_assets/isaaclab_assets/robots/omniquad.py --> cambiare il path a riga 15, togli enea e metti il tuo path
 
-ciao ciao
+# Lanciare addestramento Flat
+./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless
+
+
+# Lanciare visualizzazione ultimo checkpoint
+./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --num_envs 32 --resume
