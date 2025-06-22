@@ -5,3 +5,7 @@
 
 # Lanciare visualizzazione ultimo checkpoint
 ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --num_envs 32 --resume
+
+
+git fetch origin
+git reset --hard origin/dev1
