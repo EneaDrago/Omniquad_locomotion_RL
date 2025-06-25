@@ -279,6 +279,16 @@ class RewardsCfg:
         weight=-1.0,
         params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*UPPER_LEG"), "threshold": 0.1},
     )
+
+    # penalties movement of legs equivalent to rewarding wheels
+    joint_movement = RewTerm(
+        func=mdp.joint_deviation_l1,
+        weight=-100,
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"])
+        }
+    )
+
     # -- optional penalties
     flat_orientation_l2 = RewTerm(func=mdp.flat_orientation_l2, weight=0.0)
     dof_pos_limits = RewTerm(func=mdp.joint_pos_limits, weight=0.0)
