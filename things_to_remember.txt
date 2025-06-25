@@ -5,3 +5,6 @@
 
 # Lanciare visualizzazione ultimo checkpoint
 ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --num_envs 32 --resume
+
+# Lanciare addestramento Rough
+./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --headless --max_iterations=300
