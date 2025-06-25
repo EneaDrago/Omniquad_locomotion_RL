@@ -116,7 +116,7 @@ class ObservationsCfg:
     class PolicyCfg(ObsGroup):
         """Observations for policy group."""
 
-        # observation terms (order preserved)
+        # observation terms (order preserved) --> these are the variables that can be seen
         base_lin_vel = ObsTerm(
             func=mdp.base_lin_vel, 
             noise=Unoise(n_min=-0.1, n_max=0.1)                    
@@ -159,6 +159,7 @@ class ObservationsCfg:
 @configclass
 class EventCfg:
     """Configuration for events."""
+    """Each robot has its own set of variables (e.g., physics material, mass, etc.) that can be randomized at different stages of the MDP."""
 
     # startup
     physics_material = EventTerm(
@@ -183,7 +184,9 @@ class EventCfg:
         },
     )
 
-    # reset
+    # external forces and torques that are applied to the robot's base that can be used to simulate external disturbances
+    # these are applied at the beginning of each episode and are kept constant for the
+    # duration of the episode
     base_external_force_torque = EventTerm(
         func=mdp.apply_external_force_torque,
         mode="reset",
@@ -194,6 +197,7 @@ class EventCfg:
         },
     )
 
+    # reset
     reset_base = EventTerm(
         func=mdp.reset_root_state_uniform,
         mode="reset",
@@ -293,8 +297,10 @@ class TerminationsCfg:
 
 
 @configclass
-class CurriculumCfg:
-    """Curriculum terms for the MDP."""
+class CurriculumCfg:        
+    """Curriculum terms for the MDP (Markov Decision Process) """
+    """This curriculum is used to increase the difficulty of the environment during training. When a robot performs well, the curriculum will increase 
+    the difficulty by changing the terrain levels."""
 
     terrain_levels = CurrTerm(func=mdp.terrain_levels_vel)
 

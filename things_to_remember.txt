@@ -3,9 +3,16 @@
 ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless
 
 
+
 # Lanciare visualizzazione ultimo checkpoint
 ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --num_envs 32 --resume
 
 
 git fetch origin
 git reset --hard origin/dev1
+
+
+# Il codice si trova qui:
+source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/omniquad/init.py
+dentro /agents ci sono i parametri dell'addestramento (es. num di epochs,etc. )  --> questo non toccarlo perché funziona bene da sé
+Dentro la cartella config ci sono i file 

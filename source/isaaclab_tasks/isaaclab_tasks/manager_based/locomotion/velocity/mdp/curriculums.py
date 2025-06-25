@@ -31,7 +31,7 @@ def terrain_levels_vel(
     This term is used to increase the difficulty of the terrain when the robot walks far enough and decrease the
     difficulty when the robot walks less than half of the distance required by the commanded velocity.
 
-    .. note::
+    .. note:
         It is only possible to use this term with the terrain type ``generator``. For further information
         on different terrain types, check the :class:`isaaclab.terrains.TerrainImporter` class.
 
