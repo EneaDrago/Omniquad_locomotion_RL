@@ -27,6 +27,7 @@ from isaaclab.terrains.config.rough import ROUGH_TERRAINS_CFG  # isort: skip
 
 ## ===========
 """Version 3: without feet_air_time reward and modify some weights"""
+"""sembra non girare sempre dove richiesto, avanti e indietro ci va correttamente"""
 ## ===========
 
 ##
