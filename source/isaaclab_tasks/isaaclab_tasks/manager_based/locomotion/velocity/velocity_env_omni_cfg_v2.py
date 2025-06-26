@@ -26,7 +26,7 @@ import isaaclab_tasks.manager_based.locomotion.velocity.mdp as mdp
 from isaaclab.terrains.config.rough import ROUGH_TERRAINS_CFG  # isort: skip
 
 ## ===========
-"""Version 0: Starting version, the one that Francesco gave us"""
+"""Version 2: Adding joint_deviation_l1 reward to penalties the movement of the legs and reward the usage of the wheels"""
 ## ===========
 
 ##
@@ -268,19 +268,28 @@ class RewardsCfg:
             "sensor_cfg": SceneEntityCfg("height_scanner"),
         },
     )
-    # feet_air_time = RewTerm(
-    #     func=mdp.feet_air_time,
-    #     weight=-0.5,
-    #     params={
-    #         "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*Roller.*"),
-    #         "command_name": "base_velocity",
-    #         "threshold": 0.1,
-    #     },
-    # )
+    feet_air_time = RewTerm(
+        func=mdp.feet_air_time,
+        weight=-0.5,
+        params={
+            "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*Roller.*"),
+            "command_name": "base_velocity",
+            "threshold": 0.1,
+        },
+    )
     undesired_contacts = RewTerm(
         func=mdp.undesired_contacts,
         weight=-1.0,
         params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*UPPER_LEG"), "threshold": 0.1},
+    )
+
+    # penalties movement of legs equivalent to rewarding wheels
+    joint_movement = RewTerm(
+        func=mdp.joint_deviation_l1,
+        weight=-100,
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"])
+        }
     )
 
     # -- optional penalties

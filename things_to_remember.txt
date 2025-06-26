@@ -25,3 +25,14 @@ Vai dentro source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocit
 - Dentro la cartella config/mdp (Markovian Decision Process), ci sono i file curriculums.py, rewards.py e terminations.py --> di base, questo non serve modificarlo, a meno che tu voglia aggiungere altri tipi di reward
 Vai dentro \source\isaaclab_assets\isaaclab_assets\robots\
 - Nel file omniquad.py, c'è la configurazione del robot (es. quanti e attuatori, etc.)
+
+##===================================================================================
+# TEMPORANEO:
+ho creato 3 versioni di velocity_env_omni_cfg:  default --> quella di Francesco
+                                                v1      --> aggiunta feet air time
+                                                v2      --> aggiunta joint deviation
+
+per scegliere quella con cui fare l'addestramento andare dentro rough_env_cfg e nell'importare la versione con la quale si vuole fare il training
+
+NOTA: è un implementazione veloce da usare come supporto al ricevimento con Francesco, ==> da modificare assolutamente
+##===================================================================================

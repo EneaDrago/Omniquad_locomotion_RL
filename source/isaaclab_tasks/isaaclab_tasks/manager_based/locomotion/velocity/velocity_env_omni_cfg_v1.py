@@ -26,7 +26,7 @@ import isaaclab_tasks.manager_based.locomotion.velocity.mdp as mdp
 from isaaclab.terrains.config.rough import ROUGH_TERRAINS_CFG  # isort: skip
 
 ## ===========
-"""Version 0: Starting version, the one that Francesco gave us"""
+"""Version 1: Adding feet airtime reward to keep the wheels on the ground"""
 ## ===========
 
 ##
@@ -268,15 +268,15 @@ class RewardsCfg:
             "sensor_cfg": SceneEntityCfg("height_scanner"),
         },
     )
-    # feet_air_time = RewTerm(
-    #     func=mdp.feet_air_time,
-    #     weight=-0.5,
-    #     params={
-    #         "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*Roller.*"),
-    #         "command_name": "base_velocity",
-    #         "threshold": 0.1,
-    #     },
-    # )
+    feet_air_time = RewTerm(
+        func=mdp.feet_air_time,
+        weight=-0.5,
+        params={
+            "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*Roller.*"),
+            "command_name": "base_velocity",
+            "threshold": 0.1,
+        },
+    )
     undesired_contacts = RewTerm(
         func=mdp.undesired_contacts,
         weight=-1.0,
