@@ -73,7 +73,7 @@ OMNIQUAD_CFG = ArticulationCfg(
             stiffness={
                 ".*ANKLE": 0.0},
             damping={
-                ".*ANKLE": 1.0,},
+                ".*ANKLE": 10.0,},
         )},
     soft_joint_pos_limit_factor=0.95,
 )
