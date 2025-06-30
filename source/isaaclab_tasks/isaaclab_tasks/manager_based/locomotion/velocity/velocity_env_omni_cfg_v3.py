@@ -94,13 +94,16 @@ class CommandsCfg:
         asset_name="robot",
         resampling_time_range=(10.0, 10.0),
         rel_standing_envs=0.02,
-        rel_heading_envs=0.0,
+        rel_heading_envs=1.0,
         heading_command=False,
         heading_control_stiffness=1.0,
         debug_vis=True,
         ranges=mdp.UniformVelocityCommandCfg.Ranges(
-            lin_vel_x=(-1.0, 1.0),lin_vel_y=(-1.0, 1.0), ang_vel_z=(-1.0, 1.0)
-        ),
+            lin_vel_x=(0.0, 0.0),
+            lin_vel_y=(-1.0, 1.0),
+            ang_vel_z=(0.0, 0.0),
+            heading=(-math.pi/3, math.pi/3),  
+),
     )
 
 
@@ -243,18 +246,18 @@ class RewardsCfg:
     # -- task
     track_lin_vel_xy_exp = RewTerm(
         func=mdp.track_lin_vel_xy_exp, 
-        weight=2.0, 
+        weight=3.0, 
         params={"command_name": "base_velocity", "std": math.sqrt(0.25)})
     
     track_ang_vel_z_exp = RewTerm(
         func=mdp.track_ang_vel_z_exp, 
-        weight=1, 
+        weight=3.0, 
         params={"command_name": "base_velocity", "std": math.sqrt(0.25)})
     
     # -- penalties
     lin_vel_z_l2 = RewTerm(
         func=mdp.lin_vel_z_l2, 
-        weight=-5.0)
+        weight=-2.0)
 
     ang_vel_xy_l2 = RewTerm(
         func=mdp.ang_vel_xy_l2, 
@@ -262,17 +265,17 @@ class RewardsCfg:
 
     dof_torques_l2 = RewTerm(
         func=mdp.joint_torques_l2, 
-        weight=-1.0e-5,
+        weight=-1.0e-6,
         params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"]),})
     
     dof_acc_l2 = RewTerm(
         func=mdp.joint_acc_l2,
-        weight=-2.5e-7,
+        weight=-2.5e-8,
         params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"]),},)
     
     action_rate_l2 = RewTerm(
         func=mdp.action_rate_l2, 
-        weight=-0.01)
+        weight=-0.2)
 
     base_height_l2 = RewTerm(
         func=mdp.base_height_l2, 
@@ -281,7 +284,7 @@ class RewardsCfg:
     
     undesired_contacts = RewTerm(
         func=mdp.undesired_contacts,
-        weight=-1.0,
+        weight=-0.1,
         params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*UPPER_LEG"), "threshold": 0.1},)
 
     # penalties movement of legs equivalent to rewarding wheels
