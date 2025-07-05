@@ -199,14 +199,25 @@ class EventCfg:
         },
     )
 
-    add_actuation_gain_rand = EventTerm(
+    add_actuation_gain_leg_rand = EventTerm(
         func=mdp.randomize_actuator_gains,
         mode="interval",
         interval_range_s=(17.5,20),
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=".*"),
-            "stiffness_distribution_params": (-5, 5),
-            "damping_distribution_params": (-10, 10),
+            "asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"]),
+            "stiffness_distribution_params": (0.9, 1.1),
+            "damping_distribution_params": (0.95, 1.05),
+            "operation": "scale",
+        },
+    )
+
+    add_actuation_gain_wheel_rand = EventTerm(
+        func=mdp.randomize_actuator_gains,
+        mode="interval",
+        interval_range_s=(17.5,20),
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names=".*ANKLE"),
+            "damping_distribution_params": (0.95, 1.05),
             "operation": "scale",
         },
     )
@@ -214,10 +225,10 @@ class EventCfg:
     add_joint_friction_rand = EventTerm(
         func=mdp.randomize_joint_parameters,
         mode="interval",
-        interval_range_s=(18.5,18.5),
+        interval_range_s=(13,13),
         params={
             "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
-            "friction_distribution_params": (-15, 15),
+            "friction_distribution_params": (0.85, 1.15),
             "operation": "scale",
         },
     )
@@ -229,8 +240,8 @@ class EventCfg:
         mode="reset",
         params={
             "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
-            "armature_distribution_params": (0, 0.002),
-            "operation": "add",
+            "armature_distribution_params": (0.9, 1.1),
+            "operation": "scale",
         },
     )
 
