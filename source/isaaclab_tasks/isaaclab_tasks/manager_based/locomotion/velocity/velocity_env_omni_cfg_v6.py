@@ -169,12 +169,13 @@ class EventCfg:
     # startup
     physics_material = EventTerm(
         func=mdp.randomize_rigid_body_material,
-        mode="startup",
+        mode="interval",
+        interval_range_s=(10,10),
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names=".*"),
-            "static_friction_range": (0.8, 0.8),
-            "dynamic_friction_range": (0.6, 0.6),
-            "restitution_range": (0.0, 0.0),
+            "static_friction_range": (0.7, 1.0),
+            "dynamic_friction_range": (0.7, 1.0),
+            "restitution_range": (0.5, 1.0),
             "num_buckets": 64,
         },
     )
@@ -191,34 +192,55 @@ class EventCfg:
 
     add_gravity_rand = EventTerm(
         func=mdp.randomize_physics_scene_gravity,
-        mode="startup",
+        mode="reset",
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names="base_link"),
-            "gravity_distribution_params": (-0.3, 0.3),
+            "gravity_distribution_params": (-0.15, 0.15),
             "operation": "add",
         },
     )
 
     add_actuation_gain_rand = EventTerm(
-        func=mdp.randomize_physics_scene_gravity,
-        mode="startup",
+        func=mdp.randomize_actuator_gains,
+        mode="interval",
+        interval_range_s=(17.5,20),
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names="base_link"),
+            "asset_cfg": SceneEntityCfg("robot", body_names=".*"),
             "stiffness_distribution_params": (-5, 5),
             "damping_distribution_params": (-10, 10),
-            "operation": "add",
+            "operation": "scale",
         },
     )
 
-    add_actuation_gain_rand = EventTerm(
+    add_joint_friction_rand = EventTerm(
         func=mdp.randomize_joint_parameters,
-        mode="startup",
+        mode="interval",
+        interval_range_s=(18.5,18.5),
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names=".*"),
             "friction_distribution_params": (-15, 15),
-            "armature_distribution_params": (0, 0.002),
-            "lower_limit_distribution_params": (0, 5),
-            "upper_limit_distribution_params": (0, 5),
+            "operation": "scale",
+        },
+    )
+
+    # add_DOF_lim_rand = EventTerm(
+    #     func=mdp.randomize_joint_parameters,
+    #     mode="interval",
+    #     interval_range_s=(13,13),
+    #     params={
+    #         "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
+    #         "lower_limit_distribution_params": (-0.3, 0.3),
+    #         "upper_limit_distribution_params": (-0.3, 0.3),
+    #         "operation": "add",
+    #         "distribution": "gaussian",
+    #     },
+    # )
+
+    add_joint_arm_rand = EventTerm(
+        func=mdp.randomize_joint_parameters,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
+            "friction_distribution_params": (-0.001, 0.001),
             "operation": "add",
         },
     )
