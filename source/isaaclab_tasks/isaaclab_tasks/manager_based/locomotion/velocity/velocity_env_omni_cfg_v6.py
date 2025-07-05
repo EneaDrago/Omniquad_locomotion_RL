@@ -216,9 +216,21 @@ class EventCfg:
         mode="interval",
         interval_range_s=(18.5,18.5),
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=".*"),
+            "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
             "friction_distribution_params": (-15, 15),
             "operation": "scale",
+        },
+    )
+
+
+
+    add_joint_arm_rand = EventTerm(
+        func=mdp.randomize_joint_parameters,
+        mode="reset",
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
+            "armature_distribution_params": (0, 0.002),
+            "operation": "add",
         },
     )
 
@@ -234,16 +246,6 @@ class EventCfg:
     #         "distribution": "gaussian",
     #     },
     # )
-
-    add_joint_arm_rand = EventTerm(
-        func=mdp.randomize_joint_parameters,
-        mode="reset",
-        params={
-            "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
-            "friction_distribution_params": (-0.001, 0.001),
-            "operation": "add",
-        },
-    )
 
     # external forces and torques that are applied to the robot's base that can be used to simulate external disturbances
     # these are applied at the beginning of each episode and are kept constant for the
