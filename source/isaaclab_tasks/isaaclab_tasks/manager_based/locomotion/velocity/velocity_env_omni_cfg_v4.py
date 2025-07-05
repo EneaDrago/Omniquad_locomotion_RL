@@ -26,7 +26,8 @@ import isaaclab_tasks.manager_based.locomotion.velocity.mdp as mdp
 from isaaclab.terrains.config.rough import ROUGH_TERRAINS_CFG  # isort: skip
 
 ## ===========
-"""Version 2: Adding joint_deviation_l1 reward to penalties the movement of the legs and reward the usage of the wheels"""
+"""Version 3: without feet_air_time reward and modify some weights"""
+"""sembra non girare sempre dove richiesto, avanti e indietro ci va correttamente"""
 ## ===========
 
 ##
@@ -93,15 +94,16 @@ class CommandsCfg:
         asset_name="robot",
         resampling_time_range=(10.0, 10.0),
         rel_standing_envs=0.02,
-        rel_heading_envs=0.0,
+        rel_heading_envs=1.0,
         heading_command=False,
         heading_control_stiffness=1.0,
         debug_vis=True,
         ranges=mdp.UniformVelocityCommandCfg.Ranges(
             lin_vel_x=(-1.0, 1.0),
-            lin_vel_y=(-1.0, 1.0), 
-            ang_vel_z=(-1.0, 1.0)
-        ),
+            lin_vel_y=(-1.0, 1.0),
+            ang_vel_z=(-1.0, 1.0),
+            heading=(-math.pi/3, math.pi/3),  
+),
     )
 
 
@@ -109,8 +111,8 @@ class CommandsCfg:
 class ActionsCfg:
     """Action specifications for the MDP."""
 
-    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names= [".*HFE", ".*KFE"], scale=0.5, use_default_offset=True)
-    joint_vel = mdp.JointVelocityActionCfg(asset_name="robot", joint_names=[".*ANKLE"], scale=2.0, use_default_offset=True)
+    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names= [".*HFE", ".*KFE"], scale=0.001, use_default_offset=True)
+    joint_vel = mdp.JointVelocityActionCfg(asset_name="robot", joint_names=[".*ANKLE"], scale=20.0, use_default_offset=True)
 
 
 @configclass
@@ -172,8 +174,8 @@ class EventCfg:
         mode="startup",
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names=".*"),
-            "static_friction_range": (0.8, 0.8),
-            "dynamic_friction_range": (0.6, 0.6),
+            "static_friction_range": (0.5, 1.1),
+            "dynamic_friction_range": (0.4, 0.8),
             "restitution_range": (0.0, 0.0),
             "num_buckets": 64,
         },
@@ -184,7 +186,7 @@ class EventCfg:
         mode="startup",
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names="base_link"),
-            "mass_distribution_params": (-1.0, 1.0),
+            "mass_distribution_params": (-1.2, 1.2),
             "operation": "add",
         },
     )
@@ -243,60 +245,62 @@ class RewardsCfg:
 
     # -- task
     track_lin_vel_xy_exp = RewTerm(
-        func=mdp.track_lin_vel_xy_exp, weight=1.0, params={"command_name": "base_velocity", "std": math.sqrt(0.25)}
-    )
+        func=mdp.track_lin_vel_xy_exp, 
+        weight=3.0, 
+        params={"command_name": "base_velocity", "std": math.sqrt(0.25)})
+    
     track_ang_vel_z_exp = RewTerm(
-        func=mdp.track_ang_vel_z_exp, weight=0.5, params={"command_name": "base_velocity", "std": math.sqrt(0.25)}
-    )
+        func=mdp.track_ang_vel_z_exp, 
+        weight=3.0, 
+        params={"command_name": "base_velocity", "std": math.sqrt(0.25)})
+    
     # -- penalties
-    lin_vel_z_l2 = RewTerm(func=mdp.lin_vel_z_l2, weight=-5.0)
-    ang_vel_xy_l2 = RewTerm(func=mdp.ang_vel_xy_l2, weight=-0.05)
+    lin_vel_z_l2 = RewTerm(
+        func=mdp.lin_vel_z_l2, 
+        weight=-2.0)
+
+    ang_vel_xy_l2 = RewTerm(
+        func=mdp.ang_vel_xy_l2, 
+        weight=-0.05)
+
     dof_torques_l2 = RewTerm(
         func=mdp.joint_torques_l2, 
-        weight=-1.0e-5,
-        params={
-            "asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"]),})
+        weight=-1.0e-6,
+        params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"]),})
+    
     dof_acc_l2 = RewTerm(
         func=mdp.joint_acc_l2,
-        weight=-2.5e-7,
-        params={
-            "asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"]),},)
-    action_rate_l2 = RewTerm(func=mdp.action_rate_l2, weight=-0.01)
+        weight=-2.5e-8,
+        params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"]),},)
+    
+    action_rate_l2 = RewTerm(
+        func=mdp.action_rate_l2, 
+        weight=-0.2)
+
     base_height_l2 = RewTerm(
         func=mdp.base_height_l2, 
         weight=-0.5,
-        params={
-            "target_height": 0.4,
-            "sensor_cfg": SceneEntityCfg("height_scanner"),
-        },
-    )
-    feet_air_time = RewTerm(
-        func=mdp.feet_air_time,
-        weight=-0.5,
-        params={
-            "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*Roller.*"),
-            "command_name": "base_velocity",
-            "threshold": 0.1,
-        },
-    )
+        params={"target_height": 0.4,"sensor_cfg": SceneEntityCfg("height_scanner"),},)
+    
     undesired_contacts = RewTerm(
         func=mdp.undesired_contacts,
-        weight=-1.0,
-        params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*UPPER_LEG"), "threshold": 0.1},
-    )
+        weight=-0.1,
+        params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*UPPER_LEG"), "threshold": 0.1},)
 
     # penalties movement of legs equivalent to rewarding wheels
     joint_movement = RewTerm(
         func=mdp.joint_deviation_l1,
-        weight=-100,
-        params={
-            "asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"])
-        }
-    )
+        weight=-3,
+        params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"])})
 
     # -- optional penalties
-    flat_orientation_l2 = RewTerm(func=mdp.flat_orientation_l2, weight=0.0)
-    dof_pos_limits = RewTerm(func=mdp.joint_pos_limits, weight=0.0)
+    flat_orientation_l2 = RewTerm(
+        func=mdp.flat_orientation_l2, 
+        weight=0.0)
+    
+    dof_pos_limits = RewTerm(
+        func=mdp.joint_pos_limits, 
+        weight=0.0)
 
 
 
