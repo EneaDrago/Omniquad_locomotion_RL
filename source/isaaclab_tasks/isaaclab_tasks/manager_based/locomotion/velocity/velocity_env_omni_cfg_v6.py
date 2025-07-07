@@ -26,8 +26,8 @@ import isaaclab_tasks.manager_based.locomotion.velocity.mdp as mdp
 from isaaclab.terrains.config.rough import ROUGH_TERRAINS_CFG  # isort: skip
 
 ## ===========
-"""Version 3: without feet_air_time reward and modify some weights"""
-"""sembra non girare sempre dove richiesto, avanti e indietro ci va correttamente"""
+"""Version 6: Domain Randomization
+"""
 ## ===========
 
 ##
@@ -94,7 +94,7 @@ class CommandsCfg:
         asset_name="robot",
         resampling_time_range=(10.0, 10.0),
         rel_standing_envs=0.02,
-        rel_heading_envs=1.0,
+        rel_heading_envs=0.0,
         heading_command=False,
         heading_control_stiffness=1.0,
         debug_vis=True,

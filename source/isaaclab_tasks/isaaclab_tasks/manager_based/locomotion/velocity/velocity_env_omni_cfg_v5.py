@@ -26,8 +26,7 @@ import isaaclab_tasks.manager_based.locomotion.velocity.mdp as mdp
 from isaaclab.terrains.config.rough import ROUGH_TERRAINS_CFG  # isort: skip
 
 ## ===========
-"""Version 3: without feet_air_time reward and modify some weights"""
-"""sembra non girare sempre dove richiesto, avanti e indietro ci va correttamente"""
+"""Version 5: versione definitiva prima del sim-to-real"""
 ## ===========
 
 ##
