@@ -40,3 +40,13 @@ per scegliere quella con cui fare l'addestramento andare dentro rough_env_cfg e 
 
 NOTA: è un implementazione veloce da usare come supporto al ricevimento con Francesco, ==> da modificare assolutamente
 ##===================================================================================
+
+
+TRANSFER LEARNING:
+Per far cominciare l'addestramento da un checkpoint precedente, aprire la cartella logs e identificare il checkpoint 
+di interesse (ad es., logs/rsl_rl/omniquad_flat/2025-07-05_18-49-55/model_299.pt)
+Dopodiché, lanciare il comando del training aggiungendo l'argomento "checkpoint_path":
+./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py \
+  --task=Isaac-Velocity-Rough-OmniQuad-v1 \
+  --resume \
+  --checkpoint_path=logs/rsl_rl/omniquad_flat/2025-07-05_18-49-55/model_299.pt
