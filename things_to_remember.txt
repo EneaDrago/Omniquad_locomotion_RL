@@ -11,12 +11,12 @@ source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/om
 ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/play.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --num_envs 32 --use_last_checkpoint
 
 # Lanciare addestramento Rough
-./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --headless --max_iterations=300
-vai dentro 
+./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Rough-OmniQuad-v1 --headless
+
 # Aprire Tensorboard
 ./isaaclab.sh -p -m tensorboard.main --logdir logs/rsl_rl/omniquad_flat/
 
-
+# Se fai casino con github
 git fetch origin
 git reset --hard origin/dev1
 
