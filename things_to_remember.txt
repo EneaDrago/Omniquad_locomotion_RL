@@ -7,7 +7,7 @@ source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/om
 
 # Lanciare visualizzazione ultimo checkpoint
 ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --num_envs 32 --resume
-
+./isaaclab.sh -p scripts/reinforcement_learning/rl_games/play.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --num_envs 32 --use_last_checkpoint
 
 # Lanciare addestramento Rough
 ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --headless --max_iterations=300
