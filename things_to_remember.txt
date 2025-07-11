@@ -1,8 +1,19 @@
 Lavora sempre nel conda environment in cui hai installato isaacsim: conda activate env_isaaclab
 
-# Lanciare addestramento Flat
-./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless
+# Lanciare addestramento
+1) Innanzitutto, preparare il file velocity_env_omni_cfg_vx.py, con tutte le specifiche del training che vuoi fare.
+    Questi files devono essere inseriti qui: /home/<nomeutente>/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/velocity_env_omni_cfg_v9.py
+2) Metti la versione giusta del file creato al punto 1 nel file /home/<nomeutente>/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/omniquad/rough_env_cfg.py
+3) Aggiungi un nuovo "gym.register" (per farlo copia e incolla uno di quelli già presenti. Stai attento a selezionare la giusta opzione tra flat e rough!) nel file:
+    /home/simone/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/omniquad/__init__.py
+4) Infine, sei pronto a lanciare il training. Per farlo, usa questi comandi:
+    # Lanciare addestramento Flat
+      ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Flat-OmniQuad-v6 --headless
+    # Lanciare addestramento Rough
+      ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Rough-OmniQuad-v2 --headless
+    NOTA: devi mettere nell'argomento --task il nome dato al gym.register
 
+    
 # Il codice si trova qui:
 source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/omniquad/init.py
 
@@ -10,8 +21,6 @@ source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/om
 ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --num_envs 32 --resume
 ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/play.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --num_envs 32 --use_last_checkpoint
 
-# Lanciare addestramento Rough
-./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Rough-OmniQuad-v1 --headless
 
 # Aprire Tensorboard
 ./isaaclab.sh -p -m tensorboard.main --logdir logs/rsl_rl/omniquad_flat/
