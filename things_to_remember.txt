@@ -13,7 +13,7 @@ Lavora sempre nel conda environment in cui hai installato isaacsim: conda activa
       ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Rough-OmniQuad-v2 --headless
     NOTA: devi mettere nell'argomento --task il nome dato al gym.register
 
-    
+
 # Il codice si trova qui:
 source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/omniquad/init.py
 
@@ -23,7 +23,9 @@ source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/om
 
 
 # Aprire Tensorboard
+Seleziona l'opzione che stai utilizzando:
 ./isaaclab.sh -p -m tensorboard.main --logdir logs/rsl_rl/omniquad_flat/
+./isaaclab.sh -p -m tensorboard.main --logdir logs/rl_games/omniquad_rough/
 
 # Se fai casino con github
 git fetch origin
@@ -55,7 +57,4 @@ TRANSFER LEARNING:
 Per far cominciare l'addestramento da un checkpoint precedente, aprire la cartella logs e identificare il checkpoint 
 di interesse (ad es., logs/rsl_rl/omniquad_flat/2025-07-05_18-49-55/model_299.pt)
 Dopodiché, lanciare il comando del training aggiungendo l'argomento "checkpoint_path":
-./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py \
-  --task=Isaac-Velocity-Rough-OmniQuad-v1 \
-  --resume \
-  --checkpoint_path=logs/rsl_rl/omniquad_flat/2025-07-05_18-49-55/model_299.pt
+./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Rough-OmniQuad-v1 --headless --checkpoint=logs/rl_games/omniquad_rough/2025-07-10_19-25-12/nn/last_omniquad_rough_ep_1650_rew_nan.pth
