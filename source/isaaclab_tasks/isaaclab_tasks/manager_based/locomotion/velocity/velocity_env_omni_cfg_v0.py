@@ -147,7 +147,7 @@ class ObservationsCfg:
         joint_vel = ObsTerm(
             func=mdp.joint_vel_rel,
             params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE", ".*ANKLE"])},
-            noise=Unoise(n_min=-3, n_max=3))
+            noise=Unoise(n_min=-5, n_max=5))
         
         actions = ObsTerm(
             func=mdp.last_action)
@@ -357,7 +357,7 @@ class RewardsCfg:
     # penalties movement of legs equivalent to rewarding wheels
     joint_movement = RewTerm(
         func=mdp.joint_deviation_l1,
-        weight=-3,
+        weight=-2,
         params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"])})
 
     # -- optional penalties

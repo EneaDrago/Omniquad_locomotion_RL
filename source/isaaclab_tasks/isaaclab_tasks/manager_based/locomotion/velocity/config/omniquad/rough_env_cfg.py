@@ -1,10 +1,6 @@
 from isaaclab.utils import configclass
 import isaaclab_tasks.manager_based.locomotion.velocity.mdp as mdp
-<<<<<<< HEAD
-from isaaclab_tasks.manager_based.locomotion.velocity.velocity_env_omni_cfg_v6 import LocomotionVelocityRoughEnvCfg
-=======
 from isaaclab_tasks.manager_based.locomotion.velocity.velocity_env_omni_cfg_v0 import LocomotionVelocityRoughEnvCfg
->>>>>>> 028ef9ebab4438dd4bee9a56924c02ed0037e4d8
 
 ##
 # Pre-defined configs
