@@ -26,7 +26,7 @@ import isaaclab_tasks.manager_based.locomotion.velocity.mdp as mdp
 from isaaclab.terrains.config.rough import ROUGH_TERRAINS_CFG  # isort: skip
 
 ## ===========
-"""Version 8: Rough terrain  ENEA
+"""Version 0: without lin vel obs
 """
 ## ===========
 
@@ -110,8 +110,8 @@ class CommandsCfg:
 class ActionsCfg:
     """Action specifications for the MDP."""
 
-    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names= [".*HFE", ".*KFE"], scale=1, use_default_offset=True)
-    joint_vel = mdp.JointVelocityActionCfg(asset_name="robot", joint_names=[".*ANKLE"], scale=2.0, use_default_offset=True)
+    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names= [".*HFE", ".*KFE"], scale=0.5, use_default_offset=True)
+    joint_vel = mdp.JointVelocityActionCfg(asset_name="robot", joint_names=[".*ANKLE"], scale=10.0, use_default_offset=True)
 
 
 @configclass
@@ -123,10 +123,10 @@ class ObservationsCfg:
         """Observations for policy group."""
 
         # observation terms (order preserved) --> these are the variables that can be seen
-        base_lin_vel = ObsTerm(
-            func=mdp.base_lin_vel, 
-            noise=Unoise(n_min=-0.1, n_max=0.1)                    
-        )
+        # base_lin_vel = ObsTerm(
+        #     func=mdp.base_lin_vel, 
+        #     noise=Unoise(n_min=-0.1, n_max=0.1)                    
+        # )
         base_ang_vel = ObsTerm(
             func=mdp.base_ang_vel, 
             noise=Unoise(n_min=-0.2, n_max=0.2)
@@ -147,7 +147,7 @@ class ObservationsCfg:
         joint_vel = ObsTerm(
             func=mdp.joint_vel_rel,
             params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE", ".*ANKLE"])},
-            noise=Unoise(n_min=-1.5, n_max=1.5))
+            noise=Unoise(n_min=-3, n_max=3))
         
         actions = ObsTerm(
             func=mdp.last_action)
@@ -357,16 +357,12 @@ class RewardsCfg:
     # penalties movement of legs equivalent to rewarding wheels
     joint_movement = RewTerm(
         func=mdp.joint_deviation_l1,
-        weight=-0.5,
+        weight=-3,
         params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"])})
 
     # -- optional penalties
     flat_orientation_l2 = RewTerm(
         func=mdp.flat_orientation_l2, 
-        weight=0.0)
-    
-    dof_pos_limits = RewTerm(
-        func=mdp.joint_pos_limits, 
         weight=0.0)
 
 
