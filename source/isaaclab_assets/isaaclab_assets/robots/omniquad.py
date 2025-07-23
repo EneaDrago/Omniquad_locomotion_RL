@@ -56,13 +56,13 @@ OMNIQUAD_CFG = ArticulationCfg(
             effort_limit_sim=5.0,
             velocity_limit_sim=10.0,
             stiffness={
-                ".*HFE": 100.7,
-                ".*KFE": 100.7,
+                ".*HFE": 100.0,
+                ".*KFE": 100.0,
             
             },
             damping={
-                ".*HFE": 10,
-                ".*KFE": 10,
+                ".*HFE": 1,
+                ".*KFE": 1,
                 
             },
         ),
@@ -73,7 +73,7 @@ OMNIQUAD_CFG = ArticulationCfg(
             stiffness={
                 ".*ANKLE": 0.0},
             damping={
-                ".*ANKLE": 10.0,},
+                ".*ANKLE": 1.0,},
         )},
     soft_joint_pos_limit_factor=0.95,
 )

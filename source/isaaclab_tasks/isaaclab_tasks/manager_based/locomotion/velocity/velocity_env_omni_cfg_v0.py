@@ -26,7 +26,7 @@ import isaaclab_tasks.manager_based.locomotion.velocity.mdp as mdp
 from isaaclab.terrains.config.rough import ROUGH_TERRAINS_CFG  # isort: skip
 
 ## ===========
-"""Version 0: without lin vel obs
+"""Version 0: test for inference
 """
 ## ===========
 
@@ -99,9 +99,9 @@ class CommandsCfg:
         heading_control_stiffness=1.0,
         debug_vis=True,
         ranges=mdp.UniformVelocityCommandCfg.Ranges(
-            lin_vel_x=(-1.0, 1.0),
-            lin_vel_y=(-1.0, 1.0),
-            ang_vel_z=(-1.0, 1.0),
+            lin_vel_x=(-0.9, 0.9),
+            lin_vel_y=(-0.9, 0.9),
+            ang_vel_z=(-0.9, 0.9),
 ),
     )
 
@@ -110,7 +110,7 @@ class CommandsCfg:
 class ActionsCfg:
     """Action specifications for the MDP."""
 
-    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names= [".*HFE", ".*KFE"], scale=0.5, use_default_offset=True)
+    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names= [".*HFE", ".*KFE"], scale=0.1, use_default_offset=True)
     joint_vel = mdp.JointVelocityActionCfg(asset_name="robot", joint_names=[".*ANKLE"], scale=10.0, use_default_offset=True)
 
 
@@ -147,7 +147,7 @@ class ObservationsCfg:
         joint_vel = ObsTerm(
             func=mdp.joint_vel_rel,
             params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE", ".*ANKLE"])},
-            noise=Unoise(n_min=-3, n_max=3))
+            noise=Unoise(n_min=-0.5, n_max=0.5))
         
         actions = ObsTerm(
             func=mdp.last_action)
@@ -324,7 +324,7 @@ class RewardsCfg:
     # -- penalties
     lin_vel_z_l2 = RewTerm(
         func=mdp.lin_vel_z_l2, 
-        weight=-5.0)
+        weight=-3.0)
 
     ang_vel_xy_l2 = RewTerm(
         func=mdp.ang_vel_xy_l2, 
@@ -357,7 +357,7 @@ class RewardsCfg:
     # penalties movement of legs equivalent to rewarding wheels
     joint_movement = RewTerm(
         func=mdp.joint_deviation_l1,
-        weight=-3,
+        weight=-10,
         params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"])})
 
     # -- optional penalties
