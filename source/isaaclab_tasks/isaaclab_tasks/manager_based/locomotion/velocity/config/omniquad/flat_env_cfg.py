@@ -32,6 +32,7 @@ class PlayOmniQuadFlatEnvCfg(PlayOmniQuadRoughEnvCfg):
         self.scene.terrain.terrain_generator = None
         # no terrain curriculum
         self.curriculum.terrain_levels = None
+        # self.scene.num_envs = 1
 
 
 # class OmniQuadFlatEnvCfg_PLAY(OmniQuadRoughEnvCfg):
