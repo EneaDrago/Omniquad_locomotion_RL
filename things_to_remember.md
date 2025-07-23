@@ -8,18 +8,19 @@ Lavora sempre nel conda environment in cui hai installato isaacsim: conda activa
     /home/simone/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/omniquad/__init__.py
 4) Infine, sei pronto a lanciare il training. Per farlo, usa questi comandi:
     # Lanciare addestramento Flat
-      ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Flat-OmniQuad-v6 --headless
+      ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless
     # Lanciare addestramento Rough
-      ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Rough-OmniQuad-v2 --headless
+      ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --headless
     NOTA: devi mettere nell'argomento --task il nome dato al gym.register
 
 
 # Il codice si trova qui:
 source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/omniquad/init.py
 
-# Lanciare visualizzazione ultimo checkpoint
-./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --num_envs 32 --resume
-./isaaclab.sh -p scripts/reinforcement_learning/rl_games/play.py --task=Isaac-Velocity-Flat-OmniQuad-v6 --num_envs 32 --use_last_checkpoint
+# PLAY: Lanciare visualizzazione ultimo checkpoint
+ ( ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --num_envs 32 --resume )
+``` ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/play.py --task=Isaac-Velocity-Flat-OmniQuad-Play-v0 --num_envs 32 --use_last_checkpoint```
+
 
 
 # Aprire Tensorboard
@@ -41,7 +42,12 @@ Vai dentro source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocit
 - Dentro la cartella config/mdp (Markovian Decision Process), ci sono i file curriculums.py, rewards.py e terminations.py --> di base, questo non serve modificarlo, a meno che tu voglia aggiungere altri tipi di reward
 Vai dentro \source\isaaclab_assets\isaaclab_assets\robots\
 - Nel file omniquad.py, c'è la configurazione del robot (es. quanti e attuatori, etc.)
+- TERRAINS:
+    - /home/simone/IsaacLab/source/isaaclab/isaaclab/terrains/height_field/hf_terrains_cfg.py
+    - /home/simone/IsaacLab/source/isaaclab/isaaclab/terrains/config/rough.py
+    - /home/simone/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/omniquad/agents/rl_games_flat_ppo_omni_cfg.yaml
 
+    
 ##===================================================================================
 # TEMPORANEO:
 ho creato 3 versioni di velocity_env_omni_cfg:  default --> quella di Francesco
@@ -59,6 +65,6 @@ Per far cominciare l'addestramento da un checkpoint precedente, aprire la cartel
 di interesse (ad es., logs/rsl_rl/omniquad_flat/2025-07-05_18-49-55/model_299.pt)
 Dopodiché, lanciare il comando del training aggiungendo l'argomento "checkpoint_path":
 
-./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Rough-OmniQuad-v1 --resume --checkpoint=logs/rsl_rl/omniquad_rough/2025-07-10_19-25-12/nn/last_omniquad_rough_ep_1650_rew_nan.pth --headless
+./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --resume --checkpoint=logs/rsl_rl/omniquad_rough/2025-07-10_19-25-12/nn/last_omniquad_rough_ep_1650_rew_nan.pth --headless
 
 ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless +params.load_checkpoint=true +params.load_path=/home/simone/IsaacLab/logs/rl_games/omniquad_flat/2025-07-22_11-47-58/nn/last_omniquad_flat_ep_1000_rew_43.461414.pth

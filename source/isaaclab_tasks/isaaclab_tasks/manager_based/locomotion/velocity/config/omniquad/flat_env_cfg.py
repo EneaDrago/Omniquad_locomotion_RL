@@ -1,6 +1,6 @@
 from isaaclab.utils import configclass
 
-from .rough_env_cfg import OmniQuadRoughEnvCfg
+from .rough_env_cfg import OmniQuadRoughEnvCfg, PlayOmniQuadRoughEnvCfg
 
 
 @configclass
@@ -18,17 +18,32 @@ class OmniQuadFlatEnvCfg(OmniQuadRoughEnvCfg):
         # no terrain curriculum
         self.curriculum.terrain_levels = None
 
-
-class OmniQuadFlatEnvCfg_PLAY(OmniQuadFlatEnvCfg):
-    def __post_init__(self) -> None:
+@configclass
+class PlayOmniQuadFlatEnvCfg(PlayOmniQuadRoughEnvCfg):
+    def __post_init__(self):
         # post init of parent
         super().__post_init__()
 
-        # make a smaller scene for play
-        self.scene.num_envs = 50
-        self.scene.env_spacing = 2.5
-        # disable randomization for play
-        self.observations.policy.enable_corruption = False
-        # remove random pushing event
-        self.events.base_external_force_torque = None
-        self.events.push_robot = None
+        # override rewards
+        self.rewards.flat_orientation_l2.weight = -5.0
+        self.rewards.dof_torques_l2.weight = -2.5e-5
+        # change terrain to flat
+        self.scene.terrain.terrain_type = "plane"
+        self.scene.terrain.terrain_generator = None
+        # no terrain curriculum
+        self.curriculum.terrain_levels = None
+
+
+# class OmniQuadFlatEnvCfg_PLAY(OmniQuadRoughEnvCfg):
+#     def __post_init__(self) -> None:
+#         # post init of parent
+#         super().__post_init__()
+
+#         # make a smaller scene for play
+#         self.scene.num_envs = 50
+#         self.scene.env_spacing = 2.5
+#         # disable randomization for play
+#         self.observations.policy.enable_corruption = False
+#         # remove random pushing event
+#         self.events.base_external_force_torque = None
+#         self.events.push_robot = None
