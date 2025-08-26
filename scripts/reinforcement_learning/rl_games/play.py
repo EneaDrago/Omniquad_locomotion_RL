@@ -32,6 +32,10 @@ parser.add_argument(
     help="When no checkpoint provided, use the last saved model. Otherwise use the best saved model.",
 )
 parser.add_argument("--real-time", action="store_true", default=False, help="Run in real-time, if possible.")
+
+
+
+
 # append AppLauncher cli args
 AppLauncher.add_app_launcher_args(parser)
 # parse the arguments
@@ -102,6 +106,9 @@ def main():
         resume_path = get_checkpoint_path(log_root_path, run_dir, checkpoint_file, other_dirs=["nn"])
     else:
         resume_path = retrieve_file_path(args_cli.checkpoint)
+
+    print("\n"*5 + "-" * 100 + f"resume_path: {resume_path}\n" + "-" * 100 + "\n"*5)
+
     log_dir = os.path.dirname(os.path.dirname(resume_path))
 
     # wrap around environment for rl-games
@@ -174,9 +181,27 @@ def main():
         # run everything in inference mode
         with torch.inference_mode():
             # convert obs to agent format
+
+           
             obs = agent.obs_to_torch(obs)
+            # obs = torch.tensor([[
+            #     0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+            #     -1.0, 0.0, 0.0, 2.03422631, -2.01354251, -2.05581637,
+            #     2.06265395, -1.18501053, 1.20149528, 1.17749159, -1.19896569, -0.53761256,
+            #     0.6401173, -1.04397909, 1.45978904, -0.54650702, -1.98597564, 3.81609342,
+            #     -2.27358037, 0.0, 0.0, 0.0, 0.0, -1.0,
+            #     0.48754352, 0.94468206, -1.0, 1.0, -1.0, -0.93783623,
+            #     0.13138187, -1.0, -0.07724608, 1.0, 1.0
+            # ]], device='cuda:0', dtype=torch.float32)
+
+            # print(f"type of obs: {type(obs)}")
+            # print("\n"*20 + f"INIZIO ITERAZIONE! Obs = {obs}" + "\n"*20)
+
+
             # agent stepping
             actions = agent.get_action(obs, is_deterministic=agent.is_deterministic)
+            # print("\n"*20 + f"MIDDLE ITERAZIONE! actions = {actions}" + "\n"*20)
+
             # env stepping
             obs, _, dones, _ = env.step(actions)
 
@@ -197,12 +222,17 @@ def main():
         if args_cli.real_time and sleep_time > 0:
             time.sleep(sleep_time)
 
+        # print("\n"*20 + "FINE ITERAZIONE!" + "\n"*20)
+        # time.sleep(0.1)
+
+
     # close the simulator
     env.close()
 
 
 if __name__ == "__main__":
     # run the main function
+    print("CIAO!\n\n\n\n\n"+"\n"*20)
     main()
     # close sim app
     simulation_app.close()
