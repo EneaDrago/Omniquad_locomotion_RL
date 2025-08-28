@@ -3,9 +3,6 @@ import isaaclab_tasks.manager_based.locomotion.velocity.mdp as mdp
 from isaaclab_tasks.manager_based.locomotion.velocity.velocity_env_omni_cfg_v0 import LocomotionVelocityRoughEnvCfg
 from isaaclab_tasks.manager_based.locomotion.velocity.vel_omni_cfg_play import PlayLocomotionVelocityRoughEnvCfg
 
-from isaaclab.envs.mdp.recorders.recorders_cfg import ActionStateRecorderManagerCfg
-
-
 ##
 # Pre-defined configs
 ##
@@ -29,4 +26,3 @@ class PlayOmniQuadRoughEnvCfg(PlayLocomotionVelocityRoughEnvCfg):
         # switch robot to omniquad
         self.scene.robot = OMNIQUAD_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")        
         
-        self.recorder_manager = ActionStateRecorderManagerCfg()

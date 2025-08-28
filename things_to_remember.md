@@ -17,14 +17,14 @@ Lavora sempre nel conda environment in cui hai installato isaacsim: conda activa
 # Il codice si trova qui:
 source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/omniquad/init.py
 
-# PLAY: Lanciare visualizzazione ultimo checkpoint
+# PLAY: 
+## Lanciare visualizzazione ultimo checkpoint
  ( ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --num_envs 32 --resume )
 ``` ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/play.py --task=Isaac-Velocity-Flat-OmniQuad-Play-v0 --num_envs 32 --use_last_checkpoint```
 
-./isaaclab.sh -p scripts/reinforcement_learning/rl_games/play.py \
-  --task=Isaac-Velocity-Flat-OmniQuad-v0 \
-  --num_envs 32 \
-  --checkpoint logs/rl_games/omniquad_flat/2025-07-22_10-49-33/nn/omniquad_flat.pth
+## Lanciare visualizzazione da un determinato checkpoint
+./isaaclab.sh -p scripts/reinforcement_learning/rl_games/play.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --num_envs 32 --checkpoint logs/rl_games/omniquad_flat/2025-07-17_11-31-56/nn/omniquad_flat.pth
+
 
 
 # Aprire Tensorboard
