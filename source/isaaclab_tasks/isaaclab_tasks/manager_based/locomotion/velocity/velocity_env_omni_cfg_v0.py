@@ -110,7 +110,7 @@ class CommandsCfg:
 class ActionsCfg:
     """Action specifications for the MDP."""
 
-    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names= [".*HFE", ".*KFE"], scale=0.1, use_default_offset=True)
+    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names= [".*HFE", ".*KFE"], scale=1.0, use_default_offset=True)
     joint_vel = mdp.JointVelocityActionCfg(asset_name="robot", joint_names=[".*ANKLE"], scale=10.0, use_default_offset=True)
 
 
@@ -312,13 +312,13 @@ class RewardsCfg:
 
     # -- task
     track_lin_vel_xy_exp = RewTerm(
-        func=mdp.track_lin_vel_xy_exp, 
-        weight=3.0, 
+        func=mdp.track_lin_vel_xy_exp_mask, 
+        weight=1.5, 
         params={"command_name": "base_velocity", "std": math.sqrt(0.25)})
     
     track_ang_vel_z_exp = RewTerm(
-        func=mdp.track_ang_vel_z_exp, 
-        weight=1, 
+        func=mdp.track_ang_vel_z_exp_mask, 
+        weight=1.0, 
         params={"command_name": "base_velocity", "std": math.sqrt(0.25)})
     
     # -- penalties
@@ -357,7 +357,7 @@ class RewardsCfg:
     # penalties movement of legs equivalent to rewarding wheels
     joint_movement = RewTerm(
         func=mdp.joint_deviation_l1,
-        weight=-10,
+        weight=0,
         params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"])})
 
     # -- optional penalties

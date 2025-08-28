@@ -64,7 +64,7 @@ params:
     save_best_after: 100
     save_frequency: 50
     grad_norm: 1.0
-    entropy_coef: 0.005
+    entropy_coef: 0.001
     truncate_grads: True
     e_clip: 0.2
     horizon_length: 24

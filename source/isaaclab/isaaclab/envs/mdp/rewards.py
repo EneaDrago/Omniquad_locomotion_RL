@@ -295,6 +295,7 @@ def track_lin_vel_xy_exp(
         torch.square(env.command_manager.get_command(command_name)[:, :2] - asset.data.root_lin_vel_b[:, :2]),
         dim=1,
     )
+    
     return torch.exp(-lin_vel_error / std**2)
 
 
@@ -307,3 +308,56 @@ def track_ang_vel_z_exp(
     # compute the error
     ang_vel_error = torch.square(env.command_manager.get_command(command_name)[:, 2] - asset.data.root_ang_vel_b[:, 2])
     return torch.exp(-ang_vel_error / std**2)
+
+
+
+"""
+Velocity-tracking rewards with masks.
+"""
+
+def track_lin_vel_xy_exp_mask(
+    env: ManagerBasedRLEnv, std: float, command_name: str, asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")
+) -> torch.Tensor:
+    """Reward tracking of linear velocity commands (xy axes) using exponential kernel.
+       Se il comando è ~0 ma il robot si muove >0.01, reward = 0.
+    """
+    asset: RigidObject = env.scene[asset_cfg.name]
+
+    # comandi desiderati e velocità attuali
+    cmd_lin_xy = env.command_manager.get_command(command_name)[:, :2]
+    act_lin_xy = asset.data.root_lin_vel_b[:, :2]
+
+    # errore quadratico
+    lin_vel_error = torch.sum(torch.square(cmd_lin_xy - act_lin_xy), dim=1)
+    reward = torch.exp(-lin_vel_error / std**2)
+
+    # condizione: comando quasi nullo ma robot si muove
+    cmd_speed = torch.norm(cmd_lin_xy, dim=1)
+    act_speed = torch.norm(act_lin_xy, dim=1)
+    mask = (cmd_speed < 0.01) & (act_speed > 0.01)
+
+    reward = torch.where(mask, torch.zeros_like(reward), reward)
+    return reward
+
+
+def track_ang_vel_z_exp_mask(
+    env: ManagerBasedRLEnv, std: float, command_name: str, asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")
+) -> torch.Tensor:
+    """Reward tracking of angular velocity commands (yaw) using exponential kernel.
+       Se il comando è ~0 ma il robot si muove >0.01, reward = 0.
+    """
+    asset: RigidObject = env.scene[asset_cfg.name]
+
+    # comandi desiderati e velocità attuali
+    cmd_ang_z = env.command_manager.get_command(command_name)[:, 2]
+    act_ang_z = asset.data.root_ang_vel_b[:, 2]
+
+    # errore quadratico
+    ang_vel_error = torch.square(cmd_ang_z - act_ang_z)
+    reward = torch.exp(-ang_vel_error / std**2)
+
+    # condizione: comando quasi nullo ma robot ruota
+    mask = (torch.abs(cmd_ang_z) < 0.01) & (torch.abs(act_ang_z) > 0.01)
+
+    reward = torch.where(mask, torch.zeros_like(reward), reward)
+    return reward

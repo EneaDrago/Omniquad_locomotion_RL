@@ -1,17 +1,22 @@
 Lavora sempre nel conda environment in cui hai installato isaacsim: conda activate env_isaaclab
 
 # Lanciare addestramento
-1) Innanzitutto, preparare il file velocity_env_omni_cfg_vx.py, con tutte le specifiche del training che vuoi fare.
+1) Innanzitutto, preparare il file velocity_env_omni_cfg_v0.py, con tutte le specifiche del training che vuoi fare.
     Questi files devono essere inseriti qui: /home/<nomeutente>/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/velocity_env_omni_cfg_v9.py
 2) Metti la versione giusta del file creato al punto 1 nel file /home/<nomeutente>/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/omniquad/rough_env_cfg.py
 3) Aggiungi un nuovo "gym.register" (per farlo copia e incolla uno di quelli già presenti. Stai attento a selezionare la giusta opzione tra flat e rough!) nel file:
     /home/simone/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/omniquad/__init__.py
 4) Infine, sei pronto a lanciare il training. Per farlo, usa questi comandi:
-    # Lanciare addestramento Flat
-      ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless
-    # Lanciare addestramento Rough
-      ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --headless
+    #### Lanciare addestramento Flat - RSL
+      ```./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless```
+    #### Lanciare addestramento Flat - RL Games
+      ```./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless```
+    #### Lanciare addestramento Rough
+      ```./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --headless```
     NOTA: devi mettere nell'argomento --task il nome dato al gym.register
+    #### Lanciare addestramento da un determinato checkpoint
+      ```./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless --checkpoint logs/rl_games/omniquad_flat/2025-08-26_22-20-42/nn/omniquad_flat.pth```
+
 
 
 # Il codice si trova qui:
@@ -24,10 +29,10 @@ source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/om
 
 
 # Aprire Tensorboard
-./isaaclab.sh -p -m tensorboard.main --logdir logs/rl_games/omniquad_flat/
 Seleziona l'opzione che stai utilizzando:
-./isaaclab.sh -p -m tensorboard.main --logdir logs/rsl_rl/omniquad_flat/
-./isaaclab.sh -p -m tensorboard.main --logdir logs/rl_games/omniquad_rough/
+- ```./isaaclab.sh -p -m tensorboard.main --logdir logs/rl_games/omniquad_flat/```
+- ```./isaaclab.sh -p -m tensorboard.main --logdir logs/rsl_rl/omniquad_flat/```
+- ```./isaaclab.sh -p -m tensorboard.main --logdir logs/rl_games/omniquad_rough/```
 
 # Se fai casino con github
 git fetch origin
