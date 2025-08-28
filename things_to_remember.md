@@ -8,7 +8,7 @@ Lavora sempre nel conda environment in cui hai installato isaacsim: conda activa
     /home/simone/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/omniquad/__init__.py
 4) Infine, sei pronto a lanciare il training. Per farlo, usa questi comandi:
     # Lanciare addestramento Flat
-      ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless
+      ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless
     # Lanciare addestramento Rough
       ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --headless
     NOTA: devi mettere nell'argomento --task il nome dato al gym.register
@@ -21,6 +21,10 @@ source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/om
  ( ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/play.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --num_envs 32 --resume )
 ``` ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/play.py --task=Isaac-Velocity-Flat-OmniQuad-Play-v0 --num_envs 32 --use_last_checkpoint```
 
+./isaaclab.sh -p scripts/reinforcement_learning/rl_games/play.py \
+  --task=Isaac-Velocity-Flat-OmniQuad-v0 \
+  --num_envs 32 \
+  --checkpoint logs/rl_games/omniquad_flat/2025-07-22_10-49-33/nn/omniquad_flat.pth
 
 
 # Aprire Tensorboard
@@ -67,4 +71,9 @@ Dopodiché, lanciare il comando del training aggiungendo l'argomento "checkpoint
 
 ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --resume --checkpoint=logs/rsl_rl/omniquad_rough/2025-07-10_19-25-12/nn/last_omniquad_rough_ep_1650_rew_nan.pth --headless
 
-./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless +params.load_checkpoint=true +params.load_path=/home/simone/IsaacLab/logs/rl_games/omniquad_flat/2025-07-22_11-47-58/nn/last_omniquad_flat_ep_1000_rew_43.461414.pth
+./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless --checkpoint logs/rl_games/omniquad_rough/2025-08-28_15-56-16/nn/omniquad_flat.pth
+
+
+ATTENZIONE: ho modificato la dimensione della rete di rl_games_rough in questo modo
+    mlp:
+      units: [128, 128, 128] # [512, 256, 128]
