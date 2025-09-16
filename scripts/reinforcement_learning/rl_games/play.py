@@ -197,6 +197,8 @@ def main():
 
             # print(f"type of obs: {type(obs)}")
             print("\n"*10 + f"INIZIO ITERAZIONE! Obs = {obs}" + "\n"*1)
+            # pause 10 seconds
+            # time.sleep(10)
 
             # agent stepping
             actions = agent.get_action(obs, is_deterministic=agent.is_deterministic)
@@ -234,7 +236,7 @@ def main():
 
 if __name__ == "__main__":
     # run the main function
-    print("CIAO!\n\n\n\n\n"+"\n"*20)
+    print("CIAO!"+"\n"*20)
     main()
     # close sim app
     simulation_app.close()

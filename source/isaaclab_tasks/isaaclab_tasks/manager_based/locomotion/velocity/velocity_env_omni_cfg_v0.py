@@ -44,7 +44,7 @@ class MySceneCfg(InteractiveSceneCfg):
         prim_path="/World/ground",
         terrain_type="generator",
         terrain_generator=ROUGH_TERRAINS_CFG,
-        max_init_terrain_level=1,
+        max_init_terrain_level=0,
         collision_group=-1,
         physics_material=sim_utils.RigidBodyMaterialCfg(
             friction_combine_mode="multiply",
@@ -110,7 +110,7 @@ class CommandsCfg:
 class ActionsCfg:
     """Action specifications for the MDP."""
 
-    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names= [".*HFE", ".*KFE"], scale=1.0, use_default_offset=True)
+    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names= [".*HFE", ".*KFE"], scale=0.5, use_default_offset=True)
     joint_vel = mdp.JointVelocityActionCfg(asset_name="robot", joint_names=[".*ANKLE"], scale=5.0, use_default_offset=True)
     
 
@@ -157,9 +157,50 @@ class ObservationsCfg:
             self.enable_corruption = True
             self.concatenate_terms = True
 
+    @configclass
+    class CriticCfg(ObsGroup):
+        """Observations for policy group."""
+
+        # observation terms (order preserved) --> these are the variables that can be seen
+        base_lin_vel = ObsTerm(
+            func=mdp.base_lin_vel, 
+            noise=Unoise(n_min=-0.1, n_max=0.1)                    
+        )
+        base_ang_vel = ObsTerm(
+            func=mdp.base_ang_vel, 
+            noise=Unoise(n_min=-0.3, n_max=0.3)
+        )
+        projected_gravity = ObsTerm(
+            func=mdp.projected_gravity,
+            noise=Unoise(n_min=-0.07, n_max=0.07),
+        )
+        velocity_commands = ObsTerm(
+            func=mdp.generated_commands, 
+            params={"command_name": "base_velocity"}
+        )
+        joint_pos = ObsTerm(
+            func=mdp.joint_pos_rel,
+            params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"])},
+                        noise=Unoise(n_min=-0.03, n_max=0.03)
+        )
+        joint_vel = ObsTerm(
+            func=mdp.joint_vel_rel,
+            params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE", ".*ANKLE"])},
+            noise=Unoise(n_min=-1.5, n_max=1.5))
+        
+        actions = ObsTerm(
+            func=mdp.last_action)
+
+        def __post_init__(self):
+            self.enable_corruption = True
+            self.concatenate_terms = True
+
     # observation groups
     policy: PolicyCfg = PolicyCfg()
-    
+
+    # Qui aggiungerai critic: ...  --> aggiungerai un gruppo di osservazioni per il critic, come ad esempio la height map dell'ambiente
+    critic: CriticCfg = CriticCfg()
+    # REMIND: controllare con il codice mandato da Simone 
 
 
 @configclass
@@ -307,6 +348,7 @@ class EventCfg:
     )
 
 
+# NOTA: nel reward shaping analizzare bene la derivata nel range di lavoro del robot
 @configclass
 class RewardsCfg:
     """Reward terms for the MDP."""
@@ -318,14 +360,14 @@ class RewardsCfg:
         params={"command_name": "base_velocity", "std": math.sqrt(0.25)})
     
     track_ang_vel_z_exp = RewTerm(
-        func=mdp.track_ang_vel_z_exp_mask, 
+        func=mdp.track_ang_vel_z_exp, 
         weight=1.0, 
         params={"command_name": "base_velocity", "std": math.sqrt(0.25)})
     
     # -- penalties
     lin_vel_z_l2 = RewTerm(
         func=mdp.lin_vel_z_l2, 
-        weight=-3.0)
+        weight=-2.0)        # DA DIMINUIRE NEL ROUGH
 
     ang_vel_xy_l2 = RewTerm(
         func=mdp.ang_vel_xy_l2, 
@@ -338,12 +380,12 @@ class RewardsCfg:
     
     dof_acc_l2 = RewTerm(
         func=mdp.joint_acc_l2,
-        weight=-2.5e-8,
+        weight=-2.5e-7,
         params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"]),},)
     
     action_rate_l2 = RewTerm(
         func=mdp.action_rate_l2, 
-        weight=-0.2)
+        weight=-2)
 
     base_height_l2 = RewTerm(
         func=mdp.base_height_l2, 
@@ -358,13 +400,13 @@ class RewardsCfg:
     # penalties movement of legs equivalent to rewarding wheels
     joint_movement = RewTerm(
         func=mdp.joint_deviation_l1,
-        weight=-10,
+        weight=-2.5,        # DA DIMINUIRE NEL ROUGH
         params={"asset_cfg": SceneEntityCfg("robot", joint_names=[".*HFE", ".*KFE"])})
 
     # -- optional penalties
     flat_orientation_l2 = RewTerm(
         func=mdp.flat_orientation_l2, 
-        weight=0.0)
+        weight=-0.0)
 
 
 

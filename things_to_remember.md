@@ -76,8 +76,9 @@ Dopodiché, lanciare il comando del training aggiungendo l'argomento "checkpoint
 
 ./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --resume --checkpoint=logs/rsl_rl/omniquad_rough/2025-07-10_19-25-12/nn/last_omniquad_rough_ep_1650_rew_nan.pth --headless
 
-./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Flat-OmniQuad-v0 --headless --checkpoint logs/rl_games/omniquad_rough/2025-08-28_15-56-16/nn/omniquad_flat.pth
+```./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --headless --checkpoint logs/rl_games/omniquad_rough/2025-08-29_06-50-46/nn/last_omniquad_rough_ep_12150_rew_30.17893.pth```
 
+./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task=Isaac-Velocity-Rough-OmniQuad-v0 --headless --checkpoint logs/rl_games/omniquad_rough/2025-09-01_22-07-59/nn/last_omniquad_rough_ep_7250_rew_nan.pth
 
 ATTENZIONE: ho modificato la dimensione della rete di rl_games_rough in questo modo
     mlp:

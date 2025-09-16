@@ -26,9 +26,17 @@ params:
           val: 0
         fixed_sigma: True
     mlp:
-      units: [128, 128, 128] # [512, 256, 128]
+      units: [512, 256, 128] # [128, 128, 128] # 
       activation: elu
       d2rl: False
+
+    rnn:          # recurrent neural network - it creates the memory
+      name: lstm
+      units: 1024
+      layers: 1
+      before_mlp: True
+      concat_input: True
+      layer_norm: True
 
       initializer:
         name: default
@@ -55,12 +63,12 @@ params:
     normalize_advantage: True
     gamma: 0.99
     tau: 0.95
-    learning_rate: 1e-3
+    learning_rate: 0.5e-3   # valore iniziale: 1e-3
     lr_schedule: adaptive
     schedule_type: legacy
     kl_threshold: 0.01
     score_to_win: 20000
-    max_epochs: 15000
+    max_epochs: 50000
     save_best_after: 100
     save_frequency: 50
     grad_norm: 1.0

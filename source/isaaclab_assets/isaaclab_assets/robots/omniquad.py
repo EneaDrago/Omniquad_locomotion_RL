@@ -56,8 +56,8 @@ OMNIQUAD_CFG = ArticulationCfg(
             effort_limit_sim=5.0,
             velocity_limit_sim=10.0,
             stiffness={
-                ".*HFE": 100.0,
-                ".*KFE": 100.0,
+                ".*HFE": 30.0,
+                ".*KFE": 30.0,
             
             },
             damping={

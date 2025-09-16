@@ -100,8 +100,11 @@ class CommandsCfg:
         debug_vis=True,
         ranges=mdp.UniformVelocityCommandCfg.Ranges(
             lin_vel_x=(-0.9, 0.9),
+            # lin_vel_x=(-0.0, 0.0),
             lin_vel_y=(-0.9, 0.9),
-            ang_vel_z=(-0.9, 0.9),
+            # ang_vel_z=(-0.9, 0.9),
+            # lin_vel_y=(-0.0, 0.0),
+            ang_vel_z=(-0.0, 0.0),
 ),
     )
 
@@ -110,8 +113,8 @@ class CommandsCfg:
 class ActionsCfg:
     """Action specifications for the MDP."""
 
-    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names= [".*HFE", ".*KFE"], scale=1.0, use_default_offset=True)
-    joint_vel = mdp.JointVelocityActionCfg(asset_name="robot", joint_names=[".*ANKLE"], scale=10.0, use_default_offset=True)
+    joint_pos = mdp.JointPositionActionCfg(asset_name="robot", joint_names= [".*HFE", ".*KFE"], scale=0.5, use_default_offset=True)
+    joint_vel = mdp.JointVelocityActionCfg(asset_name="robot", joint_names=[".*ANKLE"], scale=5.0, use_default_offset=True)
 
 
 @configclass
